@@ -33,11 +33,21 @@ const mensajes = document.getElementById("mensajes");
 
 const texto = document.getElementById("texto");
 
+let nombre = localStorage.getItem("nombre");
+
+if (!nombre) {
+
+    nombre = prompt("Ingresa tu nombre");
+
+    localStorage.setItem("nombre", nombre);
+}
+
 window.enviar = function () {
 
     if (texto.value.trim() === "") return;
 
     push(mensajesRef, {
+        nombre: nombre,
         texto: texto.value
     });
 
@@ -46,11 +56,18 @@ window.enviar = function () {
 
 onChildAdded(mensajesRef, (data) => {
 
-    const p = document.createElement("p");
+    const msg = data.val();
 
-    p.textContent = data.val().texto;
+    const div = document.createElement("div");
 
-    mensajes.appendChild(p);
+    div.classList.add("mensaje");
+
+    div.innerHTML = `
+        <strong>${msg.nombre}:</strong>
+        <p>${msg.texto}</p>
+    `;
+
+    mensajes.appendChild(div);
 
     mensajes.scrollTop = mensajes.scrollHeight;
 });
