@@ -1,73 +1,66 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-    getDatabase,
-    ref,
-    push,
-    onChildAdded
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyATs99uThauo5j_ss1qgBx-6RDx-kZ5Px4",
-
-    authDomain: "chat-9218a-f9f59.firebaseapp.com",
-
-    databaseURL: "https://chat-9218a-f9f59-default-rtdb.firebaseio.com/",
-
-    projectId: "chat-9218a-f9f59",
-
-    storageBucket: "chat-9218a-f9f59.firebasestorage.app",
-
-    messagingSenderId: "282203482397",
-
-    appId: "1:282203482397:web:10993120ac21aca75d59f4"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getDatabase(app);
-
-const mensajesRef = ref(db, "mensajes");
-
-const mensajes = document.getElementById("mensajes");
-
-const texto = document.getElementById("texto");
-
-let nombre = localStorage.getItem("nombre");
-
-if (!nombre) {
-
-    nombre = prompt("Ingresa tu nombre");
-
-    localStorage.setItem("nombre", nombre);
+body{
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
 }
 
-window.enviar = function () {
+.chat{
+    width:400px;
+    background:#1b1b1b;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+}
 
-    if (texto.value.trim() === "") return;
+#mensajes{
+    height:450px;
+    overflow-y:auto;
+    padding:10px;
+    border-radius:10px;
+    background:#111;
+    margin-bottom:15px;
+}
 
-    push(mensajesRef, {
-        nombre: nombre,
-        texto: texto.value
-    });
+.mensaje{
+    background:#2a2a2a;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
 
-    texto.value = "";
-};
+.mensaje strong{
+    color:#4da6ff;
+}
 
-onChildAdded(mensajesRef, (data) => {
+.mensaje p{
+    margin:5px 0 0;
+}
 
-    const msg = data.val();
+.input-area{
+    display:flex;
+    gap:10px;
+}
 
-    const div = document.createElement("div");
+input{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+    background:#333;
+    color:white;
+}
 
-    div.classList.add("mensaje");
-
-    div.innerHTML = `
-        <strong>${msg.nombre}:</strong>
-        <p>${msg.texto}</p>
-    `;
-
-    mensajes.appendChild(div);
-
-    mensajes.scrollTop = mensajes.scrollHeight;
-});
+button{
+    padding:12px 18px;
+    border:none;
+    border-radius:10px;
+    background:#4da6ff;
+    color:white;
+    cursor:pointer;
+}
